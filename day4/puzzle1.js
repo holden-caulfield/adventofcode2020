@@ -15,7 +15,7 @@ const readInterface = readline.createInterface({
 readInterface.on('line', (line) => {
     if (line === "") {
         passports.push(currentPassport)
-        currentPassport = []
+        currentPassport = {}
     } else {
         const newFields = line.split(" ").map(field => field.split(":"))
         newFields.forEach(([key, value]) => {

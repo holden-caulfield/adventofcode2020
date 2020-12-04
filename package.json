@@ -1,0 +1,30 @@
+{
+  "name": "hc-adventofcode-2020",
+  "version": "1.0.0",
+  "description": "Advent of Code 2020 challenges",
+  "main": "index.js",
+  "dependencies": {
+    "ramda": "^0.27.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/holden-caulfield/adventofcode2020.git"
+  },
+  "keywords": [
+    "code",
+    "challenge",
+    "adventofcode",
+    "javascript",
+    "node"
+  ],
+  "author": "JP Saraceno",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/holden-caulfield/adventofcode2020/issues"
+  },
+  "homepage": "https://github.com/holden-caulfield/adventofcode2020#readme"
+}

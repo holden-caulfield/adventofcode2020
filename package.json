@@ -4,7 +4,8 @@
   "description": "Advent of Code 2020 challenges",
   "main": "index.js",
   "dependencies": {
-    "ramda": "^0.27.1"
+    "ramda": "^0.27.1",
+    "rxjs": "^6.6.3"
   },
   "devDependencies": {},
   "scripts": {

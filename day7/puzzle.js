@@ -21,8 +21,10 @@ const buildRuleEntry = ([container, content]) => [
 ]
 
 //muted yellow bags contain 2 shiny gold bags, 9 faded blue bags.
-//=> ['muted yellow', '2 shiny  gold bags, 9 faded blue bags.']
-const parseRule = R.pipe(R.split(" bags contain "), buildRuleEntry)
+const parseRule = R.pipe(
+  R.split(" bags contain "), //['muted yellow', '2 shiny  gold bags, 9 faded blue bags.']
+  buildRuleEntry
+)
 
 const rule$ = lineByLine(FILE).pipe(map(parseRule))
 

@@ -64,10 +64,7 @@ instruction$.subscribe((instructions) => {
   reportError(firstRunState)
   console.log("Looking for a fix")
 
-  const positionsToTry = R.pipe(
-    R.pluck("cursor"),
-    R.reverse
-  )(firstRunState.history)
+  const positionsToTry = R.pluck("cursor", firstRunState.history)
 
   const tryFix = (acc, positionToTry) => {
     const newProgram = flipOperation(instructions, positionToTry)

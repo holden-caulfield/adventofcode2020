@@ -2,7 +2,7 @@ const { lineByLine } = require("../utils/rxFile")
 const R = require("ramda")
 const { reduce, map } = require("rxjs/operators")
 
-const FILE = "./sample.txt"
+const FILE = "./data.txt"
 
 //'2 shiny  gold bags, 9 faded blue bags.'
 const processContent = R.pipe(

@@ -37,3 +37,22 @@ const combinationsForIndex = (index, accumMap) => {
 const combinationsMap = R.reduceRight(combinationsForIndex, [], indexRange)
 
 console.log(`Total possible arrangements: ${R.head(combinationsMap)}`)
+
+//@emandrada style!
+const combinationsFor = (target, memo) =>
+  R.pipe(
+    R.filter(({ value }) => value + 3 >= target),
+    R.pluck("combinations"),
+    R.sum
+  )(memo)
+
+const combinations = R.reduce(
+  (memo, value) => [
+    ...R.takeLast(2, memo),
+    { value, combinations: combinationsFor(value, memo) }
+  ],
+  [{ value: 0, combinations: 1 }],
+  R.tail(sortedAdapters)
+)
+
+console.log(`Total possible arrangements: ${R.last(combinations).combinations}`)

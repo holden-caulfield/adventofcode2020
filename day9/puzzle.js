@@ -29,9 +29,11 @@ const findSumNumbers = ({ target, lookupSet }) =>
   )
 
 const findWeakSet = (data, target) => {
-  let sum = 0,
-    members = []
-  for (let member of data) {
+  let [first, ...rest] = data,
+    sum = first,
+    members = [first]
+
+  for (let member of rest) {
     sum += member
     members.push(member)
     if (sum === target) return members

@@ -67,17 +67,17 @@ const applyInstruction = (updateMemoryMethod) => (
   }
 }
 
-const instruction$ = (updateMemoryMethod) =>
+const runProgram = (updateMemoryMethod) =>
   lineByLine(FILE).pipe(
     map(parseInstruction),
     reduce(applyInstruction(updateMemoryMethod), getFreshInitialState()),
     map(({ memory }) => R.sum(Object.values(memory)))
   )
 
-instruction$(updateByMaskedValue).subscribe((totalSum) =>
+runProgram(updateByMaskedValue).subscribe((totalSum) =>
   console.log(`Total sum for case 1 is ${totalSum}`)
 )
 
-instruction$(updateByMaskedAddresses).subscribe((totalSum) =>
+runProgram(updateByMaskedAddresses).subscribe((totalSum) =>
   console.log(`Total sum for case 2 is ${totalSum}`)
 )

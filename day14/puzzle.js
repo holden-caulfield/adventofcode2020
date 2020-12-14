@@ -4,7 +4,7 @@ const R = require("ramda")
 
 const FILE = "./data.txt"
 
-const getFreshInitialState = () => ({ memory: {}, mask: "" })
+const INITIAL_STATE = { memory: {}, mask: "" }
 
 const chainIndexed = R.addIndex(R.chain)
 
@@ -26,8 +26,8 @@ const maskValue = (value, mask) => {
   return (BigInt(value) | maskForOnes) & maskForZeroes
 }
 
-const maskAddresses = (address, floatingMask) => {
-  const expandedMasks = R.reduce(
+const expandFloatingMask = (floatingMask) =>
+  R.reduce(
     (masks, index) =>
       R.chain(
         (mask) => [setBit(mask, index, 0), setBit(mask, index, 1)],
@@ -36,48 +36,49 @@ const maskAddresses = (address, floatingMask) => {
     [floatingMask.replace(/0/g, "X")],
     findAllFloating(floatingMask)
   )
-  return expandedMasks.map((mask) => maskValue(address, mask))
-}
 
-const updateByMaskedValue = ({ memory, mask }, address, value) => {
-  memory[address] = maskValue(value, mask)
-  return memory
-}
-
-const updateByMaskedAddresses = ({ memory, mask }, baseAddress, value) => {
-  const addresses = maskAddresses(baseAddress, mask)
+const updateMemory = (state, addresses, value) => {
   for (address of addresses) {
-    memory[address.toString()] = value
+    state.memory[address.toString()] = value
   }
-  return memory
 }
 
-const applyInstruction = (updateMemoryMethod) => (
+const updateMask = (state, maskMode, argument) => {
+  state.mask = maskMode === "address" ? expandFloatingMask(argument) : argument
+}
+
+const applyInstruction = (maskMode = "values") => (
   state,
   { operation, address, argument }
 ) => {
   switch (operation) {
     case "mask":
-      return { ...state, mask: argument }
+      updateMask(state, maskMode, argument)
+      break
     case "mem":
-      return {
-        ...state,
-        memory: updateMemoryMethod(state, address, argument)
-      }
+      const addresses =
+        maskMode === "address"
+          ? state.mask.map((mask) => maskValue(address, mask))
+          : [address]
+      const value =
+        maskMode === "values" ? maskValue(argument, state.mask) : argument
+      updateMemory(state, addresses, value)
+      break
   }
+  return state
 }
 
-const runProgram = (updateMemoryMethod) =>
+const runProgram = (maskMode) =>
   lineByLine(FILE).pipe(
     map(parseInstruction),
-    reduce(applyInstruction(updateMemoryMethod), getFreshInitialState()),
+    reduce(applyInstruction(maskMode), R.clone(INITIAL_STATE)),
     map(({ memory }) => R.sum(Object.values(memory)))
   )
 
-runProgram(updateByMaskedValue).subscribe((totalSum) =>
+runProgram("values").subscribe((totalSum) =>
   console.log(`Total sum for case 1 is ${totalSum}`)
 )
 
-runProgram(updateByMaskedAddresses).subscribe((totalSum) =>
+runProgram("address").subscribe((totalSum) =>
   console.log(`Total sum for case 2 is ${totalSum}`)
 )

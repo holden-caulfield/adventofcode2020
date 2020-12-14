@@ -1,5 +1,5 @@
 const { lineByLine } = require("../utils/rxFile")
-const { map, reduce, tap } = require("rxjs/operators")
+const { map, reduce } = require("rxjs/operators")
 const R = require("ramda")
 
 const FILE = "./data.txt"

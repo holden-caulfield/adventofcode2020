@@ -1,20 +1,21 @@
 const seed = [0, 6, 1, 7, 2, 19, 20]
 const LIMIT = 30000000
+
 let answer
 
 function* generateElvesNumbers() {
-  let memory = {}
+  let memory = new Map()
   let currentIndex = 0
   let lastNumber
 
   const getLastNumberOffset = () =>
-    memory[lastNumber] ? currentIndex - memory[lastNumber] : 0
+    memory.has(lastNumber) ? currentIndex - memory.get(lastNumber) : 0
 
   while (true) {
     const nextNumber =
       currentIndex < seed.length ? seed[currentIndex] : getLastNumberOffset()
 
-    memory[lastNumber] = currentIndex
+    memory.set(lastNumber, currentIndex)
     currentIndex++
     lastNumber = nextNumber
 
@@ -24,8 +25,7 @@ function* generateElvesNumbers() {
 
 const elvesNumbers = generateElvesNumbers()
 
-for (i = 0; i < LIMIT; i++) {
-  if (i % (LIMIT / 100) === 0) console.log(`progress ${(i * 100) / LIMIT}%`)
+for (let i = 0; i < LIMIT; i++) {
   answer = elvesNumbers.next().value
 }
 
